@@ -6,6 +6,11 @@ The **Mini User Management System** is a full-stack web application designed to 
 
 The primary objective of this project is to demonstrate backend development skills, including authentication flows, role-based authorization, secure API design, database modeling, clean architectural patterns, and a functional frontend interface.
 
+## Live Deployment URLs
+
+- Frontend Application: https://backend-intern-assessment-bhushan-v.vercel.app
+- Backend API: https://backend-intern-assessment-bhushan.onrender.com
+- API Documentation (Postman): https://documenter.getpostman.com/view/49633286/2sBXVbJEac#642449ad-642d-4107-99c8-d8c861d2f515
 
 ## Overview
 
