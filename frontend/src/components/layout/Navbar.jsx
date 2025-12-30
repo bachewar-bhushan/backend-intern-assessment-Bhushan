@@ -7,12 +7,14 @@ const Navbar = ({ user, onLogout }) => {
   // If user not loaded yet, don’t render navbar
   if (!user) return null;
 
+  const isAdmin = user.role === "admin";
+
   return (
     <nav className="w-full bg-white border-b shadow-sm">
       <div className="w-full px-6 py-3 flex items-center justify-between">
         {/* Left: App Name */}
         <Link
-          to="/dashboard"
+          to={isAdmin ? "/dashboard" : "/"}
           className="text-xl font-semibold tracking-tight text-indigo-600"
         >
           User Management
@@ -20,30 +22,26 @@ const Navbar = ({ user, onLogout }) => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
-          <Link
-            to="/dashboard"
-            className="text-sm font-medium text-gray-700 hover:text-indigo-600"
-          >
-            Dashboard
-          </Link>
+          {/* ✅ Admin-only links */}
+          {isAdmin && (
+            <>
+              <Link
+                to="/dashboard"
+                className="text-sm font-medium text-gray-700 hover:text-indigo-600"
+              >
+                Dashboard
+              </Link>
 
-          {user.role === "admin" && (
-            <Link
-              to="/admin/users"
-              className="text-sm font-medium text-gray-700 hover:text-indigo-600"
-            >
-              Users
-            </Link>
+              <Link
+                to="/admin/users"
+                className="text-sm font-medium text-gray-700 hover:text-indigo-600"
+              >
+                Users
+              </Link>
+            </>
           )}
 
-          {user.role === "user" && (
-            <Link
-              to="/profile"
-              className="text-sm font-medium text-gray-700 hover:text-indigo-600"
-            >
-              My Profile
-            </Link>
-          )}
+          {/* ❌ User-specific links removed */}
 
           {/* User Info */}
           <div className="flex items-center gap-3 pl-4 border-l">
@@ -53,9 +51,7 @@ const Navbar = ({ user, onLogout }) => {
               </span>
               <span
                 className={`text-xs font-medium capitalize ${
-                  user.role === "admin"
-                    ? "text-indigo-600"
-                    : "text-gray-500"
+                  isAdmin ? "text-indigo-600" : "text-gray-500"
                 }`}
               >
                 {user.role}
@@ -84,30 +80,28 @@ const Navbar = ({ user, onLogout }) => {
       {/* Mobile Menu */}
       {menuOpen && (
         <div className="md:hidden border-t bg-white px-6 py-4 space-y-3">
-          <Link
-            to="/dashboard"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Dashboard
-          </Link>
+          {/* ✅ Admin-only links */}
+          {isAdmin && (
+            <>
+              <Link
+                to="/dashboard"
+                className="block text-sm font-medium text-gray-700"
+                onClick={() => setMenuOpen(false)}
+              >
+                Dashboard
+              </Link>
 
-          {user.role === "admin" && (
-            <Link
-              to="/admin/users"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Users
-            </Link>
+              <Link
+                to="/admin/users"
+                className="block text-sm font-medium text-gray-700"
+                onClick={() => setMenuOpen(false)}
+              >
+                Users
+              </Link>
+            </>
           )}
 
-          {user.role === "user" && (
-            <Link
-              to="/profile"
-              className="block text-sm font-medium text-gray-700"
-            >
-              My Profile
-            </Link>
-          )}
+          {/* ❌ User-specific links removed */}
 
           <div className="pt-3 border-t text-sm text-gray-600">
             <div className="font-medium">{user.fullName}</div>
