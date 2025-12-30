@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "test": "set NODE_ENV=test && jest --runInBand"
+    "test": "set NODE_ENV=test && set JWT_SECRET=testsecret && jest --runInBand"
   },
   "keywords": [],
   "author": "",
