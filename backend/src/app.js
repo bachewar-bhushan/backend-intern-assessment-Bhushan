@@ -1,25 +1,63 @@
-  // src/app.js
-  const express = require("express");
-  const cookieParser = require("cookie-parser");
-  const app = express();
-  const cors = require("cors");
+// src/app.js
 
-  // middleware
-  app.use(express.json());
-  app.use(cookieParser());
-  app.use(
-    cors({
-      origin: "https://backend-intern-assessment-bhushan-v7fx-5gk8flxii.vercel.app", // frontend URL
-      credentials: true,               // 🔑 allow cookies
-    })
-  );
+const express = require("express");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
-  app.use("/api/auth", require("./routes/auth.routes"));
-  app.use("/api/users", require("./routes/user.routes"));
-  app.use("/api/admin", require("./routes/admin.routes"));
-  // test route
-  app.get("/", (req, res) => {
-    res.send("API running");
-  });
+const app = express();
 
-  module.exports = app;
+/* ===================== CORS CONFIG (FINAL) ===================== */
+
+// Allowed fixed origins
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://backend-intern-assessment-bhushan-v.vercel.app", // Vercel production
+];
+
+// Allow ALL Vercel preview subdomains
+const vercelPreviewRegex =
+  /^https:\/\/backend-intern-assessment-bhushan-.*\.vercel\.app$/;
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Allow requests with no origin (Postman, server-to-server)
+      if (!origin) return callback(null, true);
+
+      // Allow fixed origins
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // Allow Vercel preview URLs
+      if (vercelPreviewRegex.test(origin)) {
+        return callback(null, true);
+      }
+
+      // Block everything else
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+/* ===================== MIDDLEWARE ===================== */
+
+app.use(express.json());
+app.use(cookieParser());
+
+/* ===================== ROUTES ===================== */
+
+app.use("/api/auth", require("./routes/auth.routes"));
+app.use("/api/users", require("./routes/user.routes"));
+app.use("/api/admin", require("./routes/admin.routes"));
+
+/* ===================== TEST ROUTE ===================== */
+
+app.get("/", (req, res) => {
+  res.send("API running");
+});
+
+module.exports = app;
