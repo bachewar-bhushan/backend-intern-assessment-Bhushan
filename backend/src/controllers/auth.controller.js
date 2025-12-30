@@ -2,15 +2,12 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-
+const isProd = process.env.NODE_ENV === "production";
 const generateToken = (user) => {
-  return jwt.sign(
-    { id: user._id, role: user.role },
-    process.env.JWT_SECRET,
-    { expiresIn: "1d" }
-  );
+  return jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
+    expiresIn: "1d",
+  });
 };
-
 
 exports.signup = async (req, res) => {
   try {
@@ -43,9 +40,9 @@ exports.signup = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true, 
-      sameSite: "none",
-      maxAge: 24 * 60 * 60 * 1000,
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
 
     res.status(201).json({
@@ -65,7 +62,6 @@ exports.signup = async (req, res) => {
     });
   }
 };
-
 
 exports.login = async (req, res) => {
   try {
@@ -101,8 +97,8 @@ exports.login = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false, 
-      sameSite: "strict",
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -124,7 +120,6 @@ exports.login = async (req, res) => {
   }
 };
 
-
 exports.logout = (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
@@ -136,7 +131,6 @@ exports.logout = (req, res) => {
     message: "Logged out successfully",
   });
 };
-
 
 exports.getCurrentUser = async (req, res) => {
   try {
