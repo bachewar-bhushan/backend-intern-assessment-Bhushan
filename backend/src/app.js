@@ -9,7 +9,7 @@
   app.use(cookieParser());
   app.use(
     cors({
-      origin: "http://localhost:5173", // frontend URL
+      origin: "https://backend-intern-assessment-bhushan-v7fx-5gk8flxii.vercel.app/login", // frontend URL
       credentials: true,               // 🔑 allow cookies
     })
   );
