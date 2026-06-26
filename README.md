@@ -1,6 +1,5 @@
 # Mini User Management System
 
-**Backend Developer Intern Assessment – Purple Merit Technologies**
 
 The **Mini User Management System** is a full-stack web application designed to manage user accounts with secure authentication and role-based access control (RBAC). The system allows users to register, authenticate, and manage their own profiles, while administrators can manage all users through activation, deactivation, and deletion features.
 
